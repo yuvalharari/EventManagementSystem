@@ -1,6 +1,35 @@
-@EventManagementApi_HostAddress = http://localhost:5072
+@baseUrl = https://localhost:7172/api/event
+@eventId = 1
 
-GET {{EventManagementApi_HostAddress}}/weatherforecast/
-Accept: application/json
+### Get all events
+GET {{baseUrl}}/schedule
 
-###
+### Create an event
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "name": "Tech Conference",
+  "startDate": "2026-12-01T09:00:00",
+  "endDate": "2026-12-01T17:00:00",
+  "maxRegistrations": 100,
+  "location": "Tel Aviv"
+}
+
+### Get an event
+GET {{baseUrl}}/{{eventId}}
+
+### Register a user to an event
+POST {{baseUrl}}/{{eventId}}/registration
+Content-Type: application/json
+
+{
+  "name": "Alice",
+  "dateOfBirth": "1990-01-01"
+}
+
+### Get event participants
+GET {{baseUrl}}/{{eventId}}/registration
+
+### Get the weather forecast for an event
+GET {{baseUrl}}/{{eventId}}/weather
