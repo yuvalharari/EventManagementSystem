@@ -1,23 +1,24 @@
 ﻿using EventManagementApi.DTOs;
-using EventManagementApi.Models;
 
 namespace EventManagementApi.Services
 {
+    public enum RegistrationResult
+    {
+        Registered,
+        EventNotFound,
+        AlreadyRegistered,
+        EventFull
+    }
+
     public interface IEventService
     {
-        Task<Event> CreateEventAsync(EventCreateDto dto);
-        Task<Event?> GetEventByIdAsync(int id);
-        Task<string> RegisterUserToEventAsync(int eventId, UserRegisterDto dto);
-        Task<IEnumerable<User>> GetUsersForEventAsync(int eventId);
-
+        Task<EventResponseDto> CreateEventAsync(EventCreateDto dto);
+        Task<EventResponseDto?> GetEventByIdAsync(int id);
+        Task<IEnumerable<EventResponseDto>> GetEventsScheduleAsync();
         Task<bool> UpdateEventAsync(int id, EventUpdateDto dto);
         Task<bool> DeleteEventAsync(int eventId);
 
-        Task<IEnumerable<Event>> GetEventsScheduleAsync();
-
-        
-
-
-
+        Task<RegistrationResult> RegisterUserToEventAsync(int eventId, UserRegisterDto dto);
+        Task<IEnumerable<UserResponseDto>?> GetUsersForEventAsync(int eventId);
     }
 }

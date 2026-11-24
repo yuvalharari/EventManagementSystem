@@ -1,6 +1,6 @@
 using EventManagementApi.Models;
-using Microsoft.EntityFrameworkCore;
 using EventManagementApi.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventManagementApi
 {
@@ -14,23 +14,24 @@ namespace EventManagementApi
                 options.UseSqlServer(builder.Configuration.GetConnectionString("EventsConnection")));
 
             builder.Services.AddMemoryCache();
-            builder.Services.AddHttpClient();
+            builder.Services.AddHttpClient<IWeatherService, WeatherService>(client =>
+            {
+                client.Timeout = TimeSpan.FromSeconds(10);
+            });
+            builder.Services.AddScoped<IEventService, EventService>();
+
+            var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("corsapp", policy =>
+                options.AddPolicy("ClientPolicy", policy =>
                 {
-                    policy.WithOrigins("*")
+                    policy.WithOrigins(allowedOrigins)
                           .AllowAnyMethod()
                           .AllowAnyHeader();
                 });
             });
 
-            builder.Services.AddScoped<IWeatherService, WeatherService>();
-
-
             builder.Services.AddControllers();
-            builder.Services.AddScoped<IEventService, EventService>();
-
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -44,7 +45,7 @@ namespace EventManagementApi
 
             app.UseHttpsRedirection();
 
-            app.UseCors("corsapp");
+            app.UseCors("ClientPolicy");
 
             app.UseAuthorization();
 

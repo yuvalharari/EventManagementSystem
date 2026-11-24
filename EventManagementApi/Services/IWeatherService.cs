@@ -1,9 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using EventManagementApi.DTOs;
 
 namespace EventManagementApi.Services
 {
     public interface IWeatherService
     {
-        Task<string> GetWeatherAsync(string location);
+        Task<WeatherResponseDto> GetWeatherAsync(string location, DateOnly date);
     }
 }

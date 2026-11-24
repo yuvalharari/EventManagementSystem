@@ -18,8 +18,4 @@ public partial class Event
     public string Location { get; set; } = null!;
 
     public virtual ICollection<EventUser> EventUsers { get; set; } = new List<EventUser>();
-
-    public string GoogleMapsLink =>
-    $"https://www.google.com/maps/search/?api=1&query={Uri.EscapeDataString(Location)}";
-
 }
